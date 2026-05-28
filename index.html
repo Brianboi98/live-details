@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Senarai Pendaki</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .list-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333333;
+            text-align: center;
+            font-size: 1.5rem;
+            line-height: 1.3;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 5px solid #007bff;
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            color: #777;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="list-container">
+        <h2>Senarai Pendaki Terkini</h2>
+        
+        <ul id="name-list">
+            <div class="loading">Memuatkan senarai pendaki...</div>
+        </ul>
+    </div>
+
+    <script>
+        // Your NEW Web App link is plugged in here too!
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwGoMEpV5NTiT4Blywk1uDOqRJ0FJ-u4GmyWv9g-K174JW3mcouO9tCq7DAtABnQZpT9A/exec';
+        
+        function loadNames() {
+            fetch(scriptURL)
+                .then(response => response.json())
+                .then(data => {
+                    const listElement = document.getElementById('name-list');
+                    listElement.innerHTML = ''; 
+
+                    if (data.length === 0) {
+                        listElement.innerHTML = '<div class="loading">Belum ada pendaki yang mendaftar.</div>';
+                        return;
+                    }
+
+                    data.forEach(row => {
+                        const li = document.createElement('li');
+                        li.textContent = row['Nama Penuh']; 
+                        listElement.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('name-list').innerHTML = '<div class="loading">Ralat memuatkan data. Sila cuba lagi.</div>';
+                });
+        }
+
+        window.onload = loadNames;
+    </script>
+
+</body>
+</html>
